@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package rpc;
+
+import "status.proto";
+
+option go_package = "git.speech.sogou/zhiyin/providers/rpc;rpc";
+option java_package = "com.sogou.speech.rpc";
+
+message RequestConfig{
+    int32 cmd = 1;
+    string gid = 2;
+    string pid = 3;
+    string imei = 4;
+    string timestamp = 5;
+}
+
+message RequestBody{
+    bytes body = 1;
+}
+
+//声纹流式请求
+message VoiceprintRecognizeRequest {
+    oneof vpr_request{
+        RequestConfig config = 1;
+        RequestBody body = 2;
+    }
+}
+
+//声纹响应
+message VoiceprintRecognizeResponse
+{
+    Status status = 1;
+    string information = 2;
+}
+
+//声纹服务接口
+service vpr {
+    rpc VoiceprintRecognize(stream VoiceprintRecognizeRequest) returns (VoiceprintRecognizeResponse);
+}
